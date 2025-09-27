@@ -1,0 +1,70 @@
+https://dontpad.com/712js/projeto-crud
+
+USE projeto_crud_712;
+
+CREATE TABLE turma (
+    id_turma INT AUTO_INCREMENT PRIMARY KEY,
+    nome_turma VARCHAR(100) NOT NULL,       -- Ex: "Infantil", "Adulto Avançado"
+    horario TIME NOT NULL,                  -- Ex: "18:30:00"
+    dias_semana VARCHAR(50) NOT NULL,       -- Ex: "Seg, Qua, Sex"
+    faixa_minima VARCHAR(20),               -- Ex: "Branca"
+    faixa_maxima VARCHAR(20),               -- Ex: "Preta"
+    observacoes TEXT
+);
+
+CREATE TABLE aluno (
+    id_aluno INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(150) NOT NULL,
+    foto VARCHAR(255),                      -- URL ou caminho da foto
+    data_nascimento DATE NOT NULL,
+    contato_responsavel VARCHAR(100),       -- Telefone/WhatsApp do responsável
+    faixa VARCHAR(20) NOT NULL,             -- Ex: "Azul", "Roxa", etc.
+    graus TINYINT DEFAULT 0,                -- Grau da faixa (0 a 4, por exemplo)
+    peso DECIMAL(5,2),                      -- Opcional
+    altura DECIMAL(5,2),                    -- Opcional
+    tipo_sanguineo VARCHAR(5),
+    plano_saude VARCHAR(100),
+    alergias TEXT,
+    observacoes_medicas TEXT,
+    status ENUM('ativo','inativo') DEFAULT 'ativo'
+);
+
+CREATE TABLE aluno_turma (
+    id_aluno INT,
+    id_turma INT,
+    data_matricula DATETIME DEFAULT current_timestamp,
+    PRIMARY KEY (id_aluno, id_turma),
+    FOREIGN KEY (id_aluno) REFERENCES aluno(id_aluno)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_turma) REFERENCES turma(id_turma)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Inserir turmas
+INSERT INTO turma (nome_turma, horario, dias_semana, faixa_minima, faixa_maxima, observacoes)
+VALUES
+('Infantil Iniciante', '18:00:00', 'Seg, Qua, Sex', 'Branca', 'Amarela', 'Turma para crianças iniciantes'),
+('Adulto Avançado', '20:00:00', 'Ter, Qui, Sab', 'Azul', 'Preta', 'Treino focado em competições');
+
+-- Inserir alunos
+INSERT INTO aluno (nome, foto, data_nascimento, contato_responsavel, faixa, graus, peso, altura, tipo_sanguineo, plano_saude, alergias, observacoes_medicas, status)
+VALUES
+('João Silva', NULL, '2015-04-12', '11999990001', 'Branca', 0, 30.5, 1.35, 'O+', 'Unimed', NULL, NULL, 'ativo'),
+('Maria Oliveira', NULL, '2014-09-23', '11999990002', 'Amarela', 1, 32.8, 1.40, 'A+', NULL, 'Lactose', 'Usa óculos', 'ativo'),
+('Carlos Pereira', NULL, '2000-01-15', '11999990003', 'Azul', 2, 75.0, 1.78, 'B-', 'Bradesco Saúde', NULL, NULL, 'ativo'),
+('Ana Souza', NULL, '1998-06-05', '11999990004', 'Roxa', 3, 65.0, 1.65, 'AB+', NULL, 'Amendoim', 'Asma controlada', 'ativo'),
+('Lucas Santos', NULL, '2010-12-01', '11999990005', 'Branca', 0, 40.2, 1.50, 'O-', NULL, NULL, NULL, 'ativo');
+
+-- Conectar alunos às turmas (aluno_turma)
+-- João, Maria e Lucas na turma Infantil
+INSERT INTO aluno_turma (id_aluno, id_turma, data_matricula)
+VALUES
+(1, 1, CURRENT_DATE),
+(2, 1, CURRENT_DATE),
+(5, 1, CURRENT_DATE);
+
+-- Carlos e Ana na turma Adulto Avançado
+INSERT INTO aluno_turma (id_aluno, id_turma, data_matricula)
+VALUES
+(3, 2, CURRENT_DATE),
+(4, 2, CURRENT_DATE);

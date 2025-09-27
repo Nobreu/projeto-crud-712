@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Alunos</title>
+    <!-- Inclui o CSS do Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap.min.css">
+    <!-- Inclui seu CSS externo para estilos personalizados (depois do Bootstrap) -->
+    <link rel="stylesheet" href="/style.css"> <!-- Caminho corrigido aqui -->
+    <style>
+        /* Seus estilos internos que não precisam de um arquivo externo podem permanecer aqui */
+        .aluno-foto {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Lista de Alunos</h1>
+
+        <% if (alunos && alunos.length > 0) { %>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Foto</th>
+                            <th>Nascimento</th>
+                            <th>Contato Resp.</th>
+                            <th>Faixa</th>
+                            <th>Graus</th>
+                            <th>Peso (kg)</th>
+                            <th>Altura (cm)</th>
+                            <th>Tipo Sanguíneo</th>
+                            <th>Plano Saúde</th>
+                            <th>Alergias</th>
+                            <th>Obs. Médicas</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% alunos.forEach(aluno => { %>
+                            <tr>
+                                <td><%= aluno.id_aluno %></td>
+                                <td><%= aluno.nome %></td>
+                                <td>
+                                    <% if (aluno.foto) { %>
+                                        <img src="<%= aluno.foto %>" alt="Foto de <%= aluno.nome %>" class="aluno-foto">
+                                    <% } else { %>
+                                        -
+                                    <% } %>
+                                </td>
+                                <td><%= new Date(aluno.data_nascimento).toLocaleDateString('pt-BR') %></td>
+                                <td><%= aluno.contato_responsavel %></td>
+                                <td><%= aluno.faixa %></td>
+                                <td><%= aluno.graus %></td>
+                                <td><%= aluno.peso %></td>
+                                <td><%= aluno.altura %></td>
+                                <td><%= aluno.tipo_sanguineo %></td>
+                                <td><%= aluno.plano_saude %></td>
+                                <td><%= aluno.alergias %></td>
+                                <td><%= aluno.observacoes_medicas %></td>
+                                <td><%= aluno.status %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        <% } else { %>
+            <div class="alert alert-info" role="alert">
+                Nenhum aluno encontrado.
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Inclui o JavaScript do Bootstrap (no final do body para melhor performance) -->
+    <script src="/bootstrap.bundle.min.js"></script>
+</body>
+</html>

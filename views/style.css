@@ -1,0 +1,13 @@
+/* /custom.css */
+
+/* Garante que a tabela tenha uma largura mínima, maior que o breakpoint XL (1200px) do Bootstrap */
+.table-responsive .table {
+    min-width: 1500px; /* Você pode ajustar este valor conforme a necessidade. 1500px é um exemplo. */
+}
+
+/* Opcional: Se você quiser que o container principal também seja mais largo em telas grandes */
+@media (min-width: 1200px) { /* Para telas maiores que o breakpoint 'lg' */
+    .container {
+        max-width: 1400px; /* Exemplo: define uma largura máxima maior para o container principal */
+    }
+}
