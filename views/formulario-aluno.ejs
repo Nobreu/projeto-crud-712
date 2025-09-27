@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= titulo %></title>
+    <link rel="stylesheet" href="/bootstrap.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .form-section h4 {
+            color: #495057;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="form-container">
+            <h1 class="mb-4 text-center"><%= titulo %></h1>
+            
+            <% if (typeof erro !== 'undefined' && erro) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= erro %>
+                </div>
+            <% } %>
+
+            <form method="POST" action="<%= aluno ? `/alunos/${aluno.id_aluno}` : '/alunos' %>">
+                <!-- Informações Básicas -->
+                <div class="form-section">
+                    <h4>Informações Básicas</h4>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="nome" class="form-label">Nome Completo *</label>
+                                <input type="text" class="form-control" id="nome" name="nome" 
+                                       value="<%= aluno ? aluno.nome : '' %>" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="data_nascimento" class="form-label">Data de Nascimento *</label>
+                                <input type="date" class="form-control" id="data_nascimento" name="data_nascimento" 
+                                       value="<%= aluno ? aluno.data_nascimento : '' %>" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="foto" class="form-label">URL da Foto</label>
+                                <input type="url" class="form-control" id="foto" name="foto" 
+                                       value="<%= aluno ? aluno.foto : '' %>" placeholder="https://exemplo.com/foto.jpg">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="contato_responsavel" class="form-label">Contato do Responsável</label>
+                                <input type="text" class="form-control" id="contato_responsavel" name="contato_responsavel" 
+                                       value="<%= aluno ? aluno.contato_responsavel : '' %>" placeholder="(11) 99999-9999">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Informações de Jiu-Jitsu -->
+                <div class="form-section">
+                    <h4>Informações de Jiu-Jitsu</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="faixa" class="form-label">Faixa *</label>
+                                <select class="form-select" id="faixa" name="faixa" required>
+                                    <option value="">Selecione a faixa</option>
+                                    <option value="Branca" <%= aluno && aluno.faixa === 'Branca' ? 'selected' : '' %>>Branca</option>
+                                    <option value="Cinza" <%= aluno && aluno.faixa === 'Cinza' ? 'selected' : '' %>>Cinza</option>
+                                    <option value="Amarela" <%= aluno && aluno.faixa === 'Amarela' ? 'selected' : '' %>>Amarela</option>
+                                    <option value="Laranja" <%= aluno && aluno.faixa === 'Laranja' ? 'selected' : '' %>>Laranja</option>
+                                    <option value="Verde" <%= aluno && aluno.faixa === 'Verde' ? 'selected' : '' %>>Verde</option>
+                                    <option value="Azul" <%= aluno && aluno.faixa === 'Azul' ? 'selected' : '' %>>Azul</option>
+                                    <option value="Roxa" <%= aluno && aluno.faixa === 'Roxa' ? 'selected' : '' %>>Roxa</option>
+                                    <option value="Marrom" <%= aluno && aluno.faixa === 'Marrom' ? 'selected' : '' %>>Marrom</option>
+                                    <option value="Preta" <%= aluno && aluno.faixa === 'Preta' ? 'selected' : '' %>>Preta</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="graus" class="form-label">Graus</label>
+                                <select class="form-select" id="graus" name="graus">
+                                    <option value="0" <%= aluno && aluno.graus == 0 ? 'selected' : '' %>>0</option>
+                                    <option value="1" <%= aluno && aluno.graus == 1 ? 'selected' : '' %>>1</option>
+                                    <option value="2" <%= aluno && aluno.graus == 2 ? 'selected' : '' %>>2</option>
+                                    <option value="3" <%= aluno && aluno.graus == 3 ? 'selected' : '' %>>3</option>
+                                    <option value="4" <%= aluno && aluno.graus == 4 ? 'selected' : '' %>>4</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Informações Físicas -->
+                <div class="form-section">
+                    <h4>Informações Físicas</h4>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="peso" class="form-label">Peso (kg)</label>
+                                <input type="number" step="0.1" class="form-control" id="peso" name="peso" 
+                                       value="<%= aluno ? aluno.peso : '' %>" placeholder="70.5">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="altura" class="form-label">Altura (cm)</label>
+                                <input type="number" step="0.1" class="form-control" id="altura" name="altura" 
+                                       value="<%= aluno ? aluno.altura : '' %>" placeholder="175.0">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="tipo_sanguineo" class="form-label">Tipo Sanguíneo</label>
+                                <select class="form-select" id="tipo_sanguineo" name="tipo_sanguineo">
+                                    <option value="">Selecione</option>
+                                    <option value="A+" <%= aluno && aluno.tipo_sanguineo === 'A+' ? 'selected' : '' %>>A+</option>
+                                    <option value="A-" <%= aluno && aluno.tipo_sanguineo === 'A-' ? 'selected' : '' %>>A-</option>
+                                    <option value="B+" <%= aluno && aluno.tipo_sanguineo === 'B+' ? 'selected' : '' %>>B+</option>
+                                    <option value="B-" <%= aluno && aluno.tipo_sanguineo === 'B-' ? 'selected' : '' %>>B-</option>
+                                    <option value="AB+" <%= aluno && aluno.tipo_sanguineo === 'AB+' ? 'selected' : '' %>>AB+</option>
+                                    <option value="AB-" <%= aluno && aluno.tipo_sanguineo === 'AB-' ? 'selected' : '' %>>AB-</option>
+                                    <option value="O+" <%= aluno && aluno.tipo_sanguineo === 'O+' ? 'selected' : '' %>>O+</option>
+                                    <option value="O-" <%= aluno && aluno.tipo_sanguineo === 'O-' ? 'selected' : '' %>>O-</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Informações Médicas -->
+                <div class="form-section">
+                    <h4>Informações Médicas</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="plano_saude" class="form-label">Plano de Saúde</label>
+                                <input type="text" class="form-control" id="plano_saude" name="plano_saude" 
+                                       value="<%= aluno ? aluno.plano_saude : '' %>" placeholder="Unimed, Bradesco, etc.">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select" id="status" name="status">
+                                    <option value="ativo" <%= aluno && aluno.status === 'ativo' ? 'selected' : '' %>>Ativo</option>
+                                    <option value="inativo" <%= aluno && aluno.status === 'inativo' ? 'selected' : '' %>>Inativo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="alergias" class="form-label">Alergias</label>
+                                <textarea class="form-control" id="alergias" name="alergias" rows="3" 
+                                          placeholder="Descreva as alergias conhecidas"><%= aluno ? aluno.alergias : '' %></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="observacoes_medicas" class="form-label">Observações Médicas</label>
+                                <textarea class="form-control" id="observacoes_medicas" name="observacoes_medicas" rows="3" 
+                                          placeholder="Outras informações médicas relevantes"><%= aluno ? aluno.observacoes_medicas : '' %></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">
+                        <%= aluno ? 'Atualizar Aluno' : 'Criar Aluno' %>
+                    </button>
+                    <a href="/alunos" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/bootstrap.bundle.min.js"></script>
+</body>
+</html>

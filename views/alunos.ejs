@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,11 +16,34 @@
             object-fit: cover;
             border-radius: 5px;
         }
+        .btn-group-sm .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
     </style>
 </head>
 <body>
     <div class="container mt-4">
-        <h1 class="mb-4">Lista de Alunos</h1>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Lista de Alunos</h1>
+            <a href="/alunos/novo" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Novo Aluno
+            </a>
+        </div>
+
+        <% if (typeof req !== 'undefined' && req.query.sucesso) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <%= req.query.sucesso %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <% } %>
+
+        <% if (typeof req !== 'undefined' && req.query.erro) { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <%= req.query.erro %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <% } %>
 
         <% if (alunos && alunos.length > 0) { %>
             <div class="table-responsive">
@@ -41,6 +64,7 @@
                             <th>Alergias</th>
                             <th>Obs. Médicas</th>
                             <th>Status</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -65,7 +89,22 @@
                                 <td><%= aluno.plano_saude %></td>
                                 <td><%= aluno.alergias %></td>
                                 <td><%= aluno.observacoes_medicas %></td>
-                                <td><%= aluno.status %></td>
+                                <td>
+                                    <span class="badge <%= aluno.status === 'ativo' ? 'bg-success' : 'bg-secondary' %>">
+                                        <%= aluno.status %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a href="/alunos/<%= aluno.id_aluno %>/editar" class="btn btn-outline-primary btn-sm" title="Editar">
+                                            ✏️
+                                        </a>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                onclick="confirmarExclusao(<%= aluno.id_aluno %>, '<%= aluno.nome %>')" title="Excluir">
+                                            🗑️
+                                        </button>
+                                    </div>
+                                </td>
                             </tr>
                         <% }); %>
                     </tbody>
@@ -78,7 +117,26 @@
         <% } %>
     </div>
 
+    <!-- Formulário oculto para exclusão -->
+    <form id="formExclusao" method="POST" style="display: none;">
+        <input type="hidden" name="_method" value="DELETE">
+    </form>
+
     <!-- Inclui o JavaScript do Bootstrap (no final do body para melhor performance) -->
     <script src="/bootstrap.bundle.min.js"></script>
+    <script>
+        function confirmarExclusao(id, nome) {
+            if (confirm(`Tem certeza que deseja excluir o aluno "${nome}"?\n\nEsta ação não pode ser desfeita.`)) {
+                // Criar formulário dinâmico para exclusão
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/alunos/${id}/deletar`;
+                
+                // Adicionar ao body e submeter
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
 </body>
 </html>
