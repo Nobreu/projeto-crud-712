@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Usuário - Sistema de Alunos</title>
+    <link rel="stylesheet" href="/bootstrap.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .create-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+        }
+        .create-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .create-header h1 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .create-header p {
+            color: #666;
+            margin: 0;
+        }
+        .btn-create {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            transition: transform 0.2s;
+        }
+        .btn-create:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        }
+        .alert {
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .back-login {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-login a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        .back-login a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="create-container">
+        <div class="create-header">
+            <h1>👤 Criar Usuário</h1>
+            <p>Cadastre um novo usuário no sistema</p>
+        </div>
+
+        <% if (typeof erro !== 'undefined' && erro) { %>
+            <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle"></i>
+                <%= erro %>
+            </div>
+        <% } %>
+
+        <form method="POST" action="/criar-usuario">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="nome" name="nome" 
+                       placeholder="Nome completo" value="<%= dados.nome || '' %>" required>
+                <label for="nome">Nome Completo</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" name="email" 
+                       placeholder="seu@email.com" value="<%= dados.email || '' %>" required>
+                <label for="email">Email</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="senha" name="senha" 
+                       placeholder="Sua senha" required minlength="6">
+                <label for="senha">Senha (mínimo 6 caracteres)</label>
+            </div>
+
+            <div class="form-floating mb-4">
+                <select class="form-select" id="tipo_usuario" name="tipo_usuario">
+                    <option value="usuario" <%= dados.tipo_usuario === 'usuario' ? 'selected' : '' %>>Usuário</option>
+                    <option value="admin" <%= dados.tipo_usuario === 'admin' ? 'selected' : '' %>>Administrador</option>
+                </select>
+                <label for="tipo_usuario">Tipo de Usuário</label>
+            </div>
+
+            <button type="submit" class="btn btn-create">
+                <i class="bi bi-person-plus"></i>
+                Criar Usuário
+            </button>
+        </form>
+
+        <div class="back-login">
+            <p>Já tem uma conta? <a href="/login">Fazer login</a></p>
+        </div>
+    </div>
+
+    <script src="/bootstrap.bundle.min.js"></script>
+</body>
+</html>
