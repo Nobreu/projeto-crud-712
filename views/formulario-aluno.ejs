@@ -58,7 +58,7 @@
                             <div class="mb-3">
                                 <label for="data_nascimento" class="form-label">Data de Nascimento *</label>
                                 <input type="date" class="form-control" id="data_nascimento" name="data_nascimento" 
-                                       value="<%= aluno ? aluno.data_nascimento : '' %>" required>
+                                       value="<%= aluno ? new Date(aluno.data_nascimento).toISOString().split('T')[0] : '' %>" required>
                             </div>
                         </div>
                     </div>
